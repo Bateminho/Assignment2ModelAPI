@@ -1,6 +1,6 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Mapster;
 using ModelAPI.Models;
 using ModelAPI.Data;
 using ModelAPI.Models.ModelDTO;
