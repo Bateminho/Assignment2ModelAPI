@@ -21,6 +21,7 @@ namespace ModelAPI.Controllers
             _context = context;
             _hubContext = hubContext;
 
+            //creates a model and job if there are none in the database
             if (context.Models.Any() || context.Jobs.Any()) return;
 
             context.Models.Add(new Model());
