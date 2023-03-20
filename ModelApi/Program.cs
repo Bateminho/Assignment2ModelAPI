@@ -1,25 +1,68 @@
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using ModelAPI.Hubs;
+using ModelAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// For use with SqlServer
+//builder.Services.AddDbContext<DataContext>(options =>
+//	options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseInMemoryDatabase("InMemoryDb"));
+
 // Add services to the container.
+builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add to fix circular reference problem with JSON serialization
+builder.Services.AddControllers().AddJsonOptions(x =>
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options => 
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();          
+        });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseStaticFiles();
+
+app.UseRouting();
 
 app.MapControllers();
+
+app.UseAuthorization();
+
+// must be called before MapHub
+app.UseCors();
+
+app.MapRazorPages();
+app.MapHub<ExpenseHub>("/expensehub");
 
 app.Run();
