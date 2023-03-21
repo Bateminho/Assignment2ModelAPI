@@ -1,7 +1,7 @@
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using ModelAPI.Hubs;
+using Microsoft.EntityFrameworkCore;
 using ModelAPI.Data;
+using ModelAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 //	options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext") ?? throw new InvalidOperationException("Connection string 'DataContext' not found.")));
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseInMemoryDatabase("InMemoryDb"));
+	options.UseInMemoryDatabase("InMemoryDb"));
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -19,20 +19,20 @@ builder.Services.AddSignalR();
 builder.Services.AddControllers();
 // Add to fix circular reference problem with JSON serialization
 builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+	x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();          
-        });
+	options.AddDefaultPolicy(
+		builder =>
+		{
+			builder.AllowAnyOrigin()
+				.AllowAnyHeader()
+				.AllowAnyMethod();
+		});
 });
 
 var app = builder.Build();
@@ -40,13 +40,14 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
+
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
+	app.UseExceptionHandler("/Error");
+	app.UseHsts();
 }
 
 app.UseHttpsRedirection();

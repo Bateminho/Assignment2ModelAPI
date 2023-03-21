@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace ModelAPI.Pages
+namespace ModelAPI.Pages;
+
+public class ExpenseUpdateModel : PageModel
 {
-    public class ExpenseUpdateModel : PageModel
-    {
-        private readonly ILogger<ExpenseUpdateModel> _logger;
+	private readonly ILogger<ExpenseUpdateModel> _logger;
 
-        public ExpenseUpdateModel(ILogger<ExpenseUpdateModel> logger)
-        {
-            _logger = logger;
-        }
+	public ExpenseUpdateModel(ILogger<ExpenseUpdateModel> logger)
+	{
+		_logger = logger;
+	}
 
-        public void OnGet()
-        {
-
-        }
-    }
+	public void OnGet()
+	{
+	}
 }
